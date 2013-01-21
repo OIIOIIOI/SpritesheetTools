@@ -181,7 +181,7 @@ class Viewer extends Sprite
 	
 	private function parseJson (_data:Dynamic) :Void
 	{
-		var _array:Array<Dynamic> = cast(_data.frames, Array<Dynamic>);
+		var _array:Array<Dynamic> = cast(_data._frames, Array<Dynamic>);
 		if (_array.length <= 0)	return;
 		var _frame:Frame;
 		for (_f in _array) {
@@ -511,7 +511,7 @@ class Viewer extends Sprite
 		for (_f in m_frames) {
 			_export.push(_f.getData());
 		}
-		var _final = { frames:_export };
+		var _final = { _frames:_export };
 		dispatchEvent(new ViewerEvent(ViewerEvent.SAVE, Json.stringify(_final)));
 	}
 	

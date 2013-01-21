@@ -6,7 +6,7 @@
   <frame>
     <library>
       <clip id="Sharepoint__" />
-      <font id="Tempesta" name="Tempesta" import="bin\pf_tempesta_seven.ttf" glyphs="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ `~!@#$%^&amp;*()-_=+[]{}\|;:'&quot;,./&lt;&gt;?" size="26093" modified="06/01/2012 11:56:08" />
+      <font id="Tempesta" name="Tempesta" import="bin\pf_tempesta_seven.ttf" glyphs="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ `~!@#$%^&amp;*()-_=+[]{}\|;:'&quot;,./&lt;&gt;?" size="26093" modified="14/01/2013 08:29:02" />
     </library>
   </frame>
 </movie>

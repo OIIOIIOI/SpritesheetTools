@@ -42,12 +42,12 @@ class Frame
 	
 	public function fromObject (_data:Dynamic) :Void
 	{
-		name = _data.name;
-		uid = _data.uid;
-		x = _data.x;
-		y = _data.y;
-		width = _data.width;
-		height = _data.height;
+		name = _data._name;
+		uid = _data._uid;
+		x = _data._x;
+		y = _data._y;
+		width = _data._width;
+		height = _data._height;
 	}
 	
 	private function setWidth (_width:Int) :Int
@@ -118,21 +118,21 @@ class Frame
 
 class FrameExport
 {
-	public var name:String;
-	public var uid:String;
-	public var x:Int;
-	public var y:Int;
-	public var width:Int;
-	public var height:Int;
+	public var _name:String;
+	public var _uid:String;
+	public var _x:Int;
+	public var _y:Int;
+	public var _width:Int;
+	public var _height:Int;
 	
-	public function new (_name:String, _uid:String, _x:Int, _y:Int, _width:Int, _height:Int)
+	public function new (name:String, uid:String, x:Int, y:Int, width:Int, height:Int)
 	{
-		name = _name;
-		uid = _uid;
-		x = _x;
-		y = _y;
-		width = _width;
-		height = _height;
+		_name = name;
+		_uid = uid;
+		_x = x;
+		_y = y;
+		_width = width;
+		_height = height;
 	}
 }
 
