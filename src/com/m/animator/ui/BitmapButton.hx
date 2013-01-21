@@ -13,19 +13,19 @@ import flash.geom.Rectangle;
 class BitmapButton extends IButton
 {
 	
-	private var m_bitmapFrame:BitmapFrame;
+	private var bitmapFrame:BitmapFrame;
 	
-	public function new (_bitmapFrame:BitmapFrame)
+	public function new (bf:BitmapFrame)
 	{
-		m_bitmapFrame = _bitmapFrame;
-		addChild(m_bitmapFrame);
+		bitmapFrame = bf;
+		addChild(bitmapFrame);
 		
 		super();
 	}
 	
 	override private function update () :Void
 	{
-		m_bitmapFrame.frame = switch (state) {
+		bitmapFrame.frame = switch (state) {
 			case ButtonState.up: 0;
 			case ButtonState.over: 1;
 			case ButtonState.down: 2;

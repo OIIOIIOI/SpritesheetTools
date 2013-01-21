@@ -15,9 +15,9 @@ class ViewerEvent extends Event
 	
 	public var data:Dynamic;
 	
-	public function new (type:String, ?_data:Dynamic = null, ?bubbles:Bool = false, ?cancelable:Bool = false)
+	public function new (type:String, ?d:Dynamic = null, ?bubbles:Bool = false, ?cancelable:Bool = false)
 	{
-		data = _data;
+		data = d;
 		super(type, bubbles, cancelable);
 	}
 	

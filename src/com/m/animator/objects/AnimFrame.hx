@@ -8,18 +8,24 @@ package com.m.animator.objects;
 class AnimFrame
 {
 	
-	private var m_frameUID:String;
+	private var frameUID:String;
 	//public var duration:Int;
 	public var x:Int;
 	public var y:Int;
 	public var flipped:Bool;
 	
-	public function new (_frameUID:String, ?_x:Int = 0, ?_y:Int = 0, ?_flipped:Bool = false)
+	/**
+	 * @param	id		frame UID
+	 * @param	?xPos	x
+	 * @param	?yPos	y
+	 * @param	?f		flipped
+	 */
+	public function new (id:String, ?xPos:Int = 0, ?yPos:Int = 0, ?f:Bool = false)
 	{
-		m_frameUID = _frameUID;
-		x = _x;
-		y = _y;
-		flipped = _flipped;
+		frameUID = id;
+		x = xPos;
+		y = yPos;
+		flipped = f;
 	}
 	
 }

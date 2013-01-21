@@ -15,34 +15,34 @@ class BitmapFrame extends Sprite
 {
 	
 	public var frame (default, setFrame):Int;
-	private var m_size:Rectangle;
-	private var m_sourceData:BitmapData;
-	private var m_bitmapData:BitmapData;
-	private var m_bitmap:Bitmap;
+	private var size:Rectangle;
+	private var sourceData:BitmapData;
+	private var bitmapData:BitmapData;
+	private var bitmap:Bitmap;
 	
-	public function new (_sourceData:BitmapData, _size:Rectangle)
+	public function new (sd:BitmapData, s:Rectangle)
 	{
 		super();
 		
-		m_sourceData = _sourceData;
-		m_size = _size;
+		sourceData = sd;
+		size = s;
 		
-		m_bitmapData = new BitmapData(Std.int(_size.width), Std.int(_size.height), true, 0x00FF00FF);
-		m_bitmap = new Bitmap(m_bitmapData);
-		addChild(m_bitmap);
+		bitmapData = new BitmapData(Std.int(s.width), Std.int(s.height), true, 0x00FF00FF);
+		bitmap = new Bitmap(bitmapData);
+		addChild(bitmap);
 		
 		frame = 0;
 	}
 	
 	private function update () :Void
 	{
-		var _rect:Rectangle = new Rectangle(m_size.x, m_size.y + frame * m_size.height, m_size.width, m_size.height);
-		m_bitmapData.copyPixels(m_sourceData, _rect, new Point());
+		var r:Rectangle = new Rectangle(size.x, size.y + frame * size.height, size.width, size.height);
+		bitmapData.copyPixels(sourceData, r, new Point());
 	}
 	
-	private function setFrame (_frame:Int) :Int
+	private function setFrame (f:Int) :Int
 	{
-		frame = _frame;
+		frame = f;
 		update();
 		return frame;
 	}

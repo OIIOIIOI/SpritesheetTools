@@ -32,18 +32,18 @@ import haxe.Json;
 class Main extends Sprite
 {
 	
-	private var m_sheetData:BitmapData;
-	private var m_jsonData:Dynamic;
-	private var m_sheetFile:FileReference;
-	private var m_jsonFile:FileReference;
+	private var sheetData:BitmapData;
+	private var jsonData:Dynamic;
+	private var sheetFile:FileReference;
+	private var jsonFile:FileReference;
 	
-	private var m_sheetButton:Button;
-	private var m_sheetLabel:Label;
-	private var m_jsonButton:Button;
-	private var m_jsonLabel:Label;
-	private var m_startButton:Button;
-	private var m_startLabel:Label;
-	private var m_viewer:Viewer;
+	private var sheetButton:Button;
+	private var sheetLabel:Label;
+	private var jsonButton:Button;
+	private var jsonLabel:Label;
+	private var startButton:Button;
+	private var startLabel:Label;
+	private var viewer:Viewer;
 	
 	static function main ()
 	{
@@ -56,127 +56,127 @@ class Main extends Sprite
 	{
 		super();
 		
-		m_sheetButton = new Button("Choose PNG file");
-		m_sheetButton.x = UI.GUTTER;
-		m_sheetButton.y = UI.GUTTER;
-		m_sheetButton.addEventListener(MouseEvent.CLICK, clickHandler);
+		sheetButton = new Button("Choose PNG file");
+		sheetButton.x = UI.GUTTER;
+		sheetButton.y = UI.GUTTER;
+		sheetButton.addEventListener(MouseEvent.CLICK, clickHandler);
 		
-		m_sheetLabel = new Label("...", 200);
-		m_sheetLabel.x = m_sheetButton.x + m_sheetButton.width;
-		m_sheetLabel.y = m_sheetButton.y;
+		sheetLabel = new Label("...", 200);
+		sheetLabel.x = sheetButton.x + sheetButton.width;
+		sheetLabel.y = sheetButton.y;
 		
-		m_jsonButton = new Button("Choose JSON file");
-		m_jsonButton.x = m_sheetButton.x;
-		m_jsonButton.y = m_sheetButton.y + m_sheetButton.height + UI.GUTTER;
-		m_jsonButton.addEventListener(MouseEvent.CLICK, clickHandler);
+		jsonButton = new Button("Choose JSON file");
+		jsonButton.x = sheetButton.x;
+		jsonButton.y = sheetButton.y + sheetButton.height + UI.GUTTER;
+		jsonButton.addEventListener(MouseEvent.CLICK, clickHandler);
 		
-		m_jsonLabel = new Label("...", 200);
-		m_jsonLabel.x = m_jsonButton.x + m_jsonButton.width;
-		m_jsonLabel.y = m_jsonButton.y;
+		jsonLabel = new Label("...", 200);
+		jsonLabel.x = jsonButton.x + jsonButton.width;
+		jsonLabel.y = jsonButton.y;
 		
-		m_startButton = new Button("Start");
-		m_startButton.x = m_sheetButton.x;
-		m_startButton.y = m_jsonButton.y + m_jsonButton.height + UI.GUTTER;
-		m_startButton.state = ButtonState.disabled;
+		startButton = new Button("Start");
+		startButton.x = sheetButton.x;
+		startButton.y = jsonButton.y + jsonButton.height + UI.GUTTER;
+		startButton.state = ButtonState.disabled;
 		
-		m_startLabel = new Label("Choose a PNG file to work with", 200);
-		m_startLabel.x = m_startButton.x + m_startButton.width;
-		m_startLabel.y = m_startButton.y;
+		startLabel = new Label("Choose a PNG file to work with", 200);
+		startLabel.x = startButton.x + startButton.width;
+		startLabel.y = startButton.y;
 		
-		addChild(m_sheetLabel);
-		addChild(m_jsonLabel);
-		addChild(m_startLabel);
+		addChild(sheetLabel);
+		addChild(jsonLabel);
+		addChild(startLabel);
 		
-		addChild(m_sheetButton);
-		addChild(m_jsonButton);
-		addChild(m_startButton);
+		addChild(sheetButton);
+		addChild(jsonButton);
+		addChild(startButton);
 	}
 	
-	private function clickHandler (_event:MouseEvent) :Void
+	private function clickHandler (e:MouseEvent) :Void
 	{
-		var _pngFilter:FileFilter = new FileFilter("PNG", "*.png");
-		var _jsonFilter:FileFilter = new FileFilter("JSON", "*.json");
-		if (_event.currentTarget == m_sheetButton) {
-			m_sheetFile = new FileReference();
-			m_sheetFile.addEventListener(Event.CANCEL, fileEventHandler);
-			m_sheetFile.addEventListener(Event.SELECT, fileEventHandler);
-			m_sheetFile.browse([_pngFilter]);
+		var pngFilter:FileFilter = new FileFilter("PNG", "*.png");
+		var jsonFilter:FileFilter = new FileFilter("JSON", "*.json");
+		if (e.currentTarget == sheetButton) {
+			sheetFile = new FileReference();
+			sheetFile.addEventListener(Event.CANCEL, fileEventHandler);
+			sheetFile.addEventListener(Event.SELECT, fileEventHandler);
+			sheetFile.browse([pngFilter]);
 		}
-		else if (_event.currentTarget == m_jsonButton) {
-			m_jsonFile = new FileReference();
-			m_jsonFile.addEventListener(Event.CANCEL, fileEventHandler);
-			m_jsonFile.addEventListener(Event.SELECT, fileEventHandler);
-			m_jsonFile.browse([_jsonFilter]);
+		else if (e.currentTarget == jsonButton) {
+			jsonFile = new FileReference();
+			jsonFile.addEventListener(Event.CANCEL, fileEventHandler);
+			jsonFile.addEventListener(Event.SELECT, fileEventHandler);
+			jsonFile.browse([jsonFilter]);
 		}
-		else if (_event.currentTarget == m_startButton && m_sheetData != null) {
-			m_viewer = new Viewer(m_sheetData, m_jsonData);
-			m_viewer.x = UI.OUTER_SPACE;
-			m_viewer.y = UI.OUTER_SPACE;
-			m_viewer.addEventListener(ViewerEvent.SAVE, viewerEventHandler);
-			addChild(m_viewer);
-		}
-	}
-	
-	private function fileEventHandler (_event:Event) :Void
-	{
-		if (_event.type == Event.SELECT) {
-			if (_event.currentTarget == m_sheetFile) {
-				m_sheetLabel.label = "Loading \"" + m_sheetFile.name + "\"...";
-				m_sheetFile.addEventListener(Event.COMPLETE, fileEventHandler);
-				m_sheetFile.load();
-			}
-			else if (_event.currentTarget == m_jsonFile) {
-				m_jsonFile.addEventListener(Event.COMPLETE, fileEventHandler);
-				m_jsonFile.load();
-			}
-		}
-		else if (_event.type == Event.CANCEL) {
-			if (_event.currentTarget == m_sheetFile) {
-				m_sheetFile = null;
-			} else if (_event.currentTarget == m_jsonFile) {
-				m_jsonFile = null;
-			}
-		}
-		else if (_event.type == Event.COMPLETE) {
-			if (_event.currentTarget == m_sheetFile) {
-				var _loader:Loader = new Loader();
-				_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, sheetEventHandler);
-				_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, sheetEventHandler);
-				_loader.loadBytes(_event.currentTarget.data);
-			}
-			else if (_event.currentTarget == m_jsonFile) {
-				m_jsonData = Json.parse(_event.currentTarget.data);
-				m_jsonLabel.label = "\"" + m_jsonFile.name + "\" loaded";
-			}
+		else if (e.currentTarget == startButton && sheetData != null) {
+			viewer = new Viewer(sheetData, jsonData);
+			viewer.x = UI.OUTER_SPACE;
+			viewer.y = UI.OUTER_SPACE;
+			viewer.addEventListener(ViewerEvent.SAVE, viewerEventHandler);
+			addChild(viewer);
 		}
 	}
 	
-	private function sheetEventHandler (_event:Event) :Void
+	private function fileEventHandler (e:Event) :Void
 	{
-		if (_event.type == Event.COMPLETE) {
-			m_sheetLabel.label = "\"" + m_sheetFile.name + "\" loaded";
-			m_startLabel.label = "Ready to start";
-			m_sheetData = cast(cast(_event.currentTarget, LoaderInfo).content, Bitmap).bitmapData;
-			m_startButton.state = ButtonState.up;
-			m_startButton.addEventListener(MouseEvent.CLICK, clickHandler);
+		if (e.type == Event.SELECT) {
+			if (e.currentTarget == sheetFile) {
+				sheetLabel.label = "Loading \"" + sheetFile.name + "\"...";
+				sheetFile.addEventListener(Event.COMPLETE, fileEventHandler);
+				sheetFile.load();
+			}
+			else if (e.currentTarget == jsonFile) {
+				jsonFile.addEventListener(Event.COMPLETE, fileEventHandler);
+				jsonFile.load();
+			}
+		}
+		else if (e.type == Event.CANCEL) {
+			if (e.currentTarget == sheetFile) {
+				sheetFile = null;
+			} else if (e.currentTarget == jsonFile) {
+				jsonFile = null;
+			}
+		}
+		else if (e.type == Event.COMPLETE) {
+			if (e.currentTarget == sheetFile) {
+				var l:Loader = new Loader();
+				l.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, sheetEventHandler);
+				l.contentLoaderInfo.addEventListener(Event.COMPLETE, sheetEventHandler);
+				l.loadBytes(e.currentTarget.data);
+			}
+			else if (e.currentTarget == jsonFile) {
+				jsonData = Json.parse(e.currentTarget.data);
+				jsonLabel.label = "\"" + jsonFile.name + "\" loaded";
+			}
 		}
 	}
 	
-	private function viewerEventHandler (_event:ViewerEvent) :Void
+	private function sheetEventHandler (e:Event) :Void
 	{
-		if (_event.type == ViewerEvent.SAVE) {
-			var _name:String;
-			if (m_jsonFile != null) {
-				_name = m_jsonFile.name;
-				m_jsonFile = null;
+		if (e.type == Event.COMPLETE) {
+			sheetLabel.label = "\"" + sheetFile.name + "\" loaded";
+			startLabel.label = "Ready to start";
+			sheetData = cast(cast(e.currentTarget, LoaderInfo).content, Bitmap).bitmapData;
+			startButton.state = ButtonState.up;
+			startButton.addEventListener(MouseEvent.CLICK, clickHandler);
+		}
+	}
+	
+	private function viewerEventHandler (e:ViewerEvent) :Void
+	{
+		if (e.type == ViewerEvent.SAVE) {
+			var name:String;
+			if (jsonFile != null) {
+				name = jsonFile.name;
+				jsonFile = null;
 			}
 			else {
-				_name = m_sheetFile.name + ".json";
-				_name = _name.split(".png").join("");
+				name = sheetFile.name + ".json";
+				name = name.split(".png").join("");
 			}
-			m_jsonFile = new FileReference();
-			m_jsonFile.addEventListener(Event.CANCEL, fileEventHandler);
-			m_jsonFile.save(_event.data, _name);
+			jsonFile = new FileReference();
+			jsonFile.addEventListener(Event.CANCEL, fileEventHandler);
+			jsonFile.save(e.data, name);
 		}
 	}
 	

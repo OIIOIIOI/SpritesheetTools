@@ -8,9 +8,9 @@ package com.m.animator.objects;
 class Animation
 {
 	
-	private var m_frames:Array<AnimFrame>;
-	private var m_name:String;
-	//private var m_looping:Bool;
+	private var frames:Array<AnimFrame>;
+	private var name:String;
+	//private var looping:Bool;
 	
 	public function new ()
 	{

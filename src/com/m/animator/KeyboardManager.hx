@@ -1,5 +1,4 @@
 package com.m.animator;
-
 import flash.display.Stage;
 import flash.events.KeyboardEvent;
 
@@ -17,73 +16,63 @@ typedef CBObject = {
 class KeyboardManager
 {
 	
-	private static var m_stage:Stage;
-	private static var m_keys:Hash<Bool>;
-	private static var m_callbacks:Hash<CBObject>;
+	private static var stage:Stage;
+	private static var keys:Hash<Bool>;
+	private static var callbacks:Hash<CBObject>;
 	
 	public function new () { }
 	
-	public static function init (_stage:Stage) :Void
-	{
-		m_stage = _stage;
-		m_keys = new Hash<Bool>();
-		m_callbacks = new Hash<CBObject>();
+	static public function init (s:Stage) :Void {
+		stage = s;
+		keys = new Hash<Bool>();
+		callbacks = new Hash<CBObject>();
 		
-		m_stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-		m_stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+		stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 	}
 	
-	private static function keyDownHandler (_event:KeyboardEvent) :Void
-	{
-		var _key:String = Std.string(_event.keyCode);
+	private static function keyDownHandler (e:KeyboardEvent) :Void {
+		var k:String = Std.string(e.keyCode);
 		// Check for callback
-		if (m_callbacks.exists(_key)) {
-			var _object:CBObject = m_callbacks.get(_key);
+		if (callbacks.exists(k)) {
+			var o:CBObject = callbacks.get(k);
 			// Call it
-			if (_object.param != null)	_object.call(_object.param);
-			else						_object.call();
+			if (o.param != null)	o.call(o.param);
+			else						o.call();
 			// Delete callback once fired (if needed)
-			if (_object.once)	deleteCallback(_event.keyCode);
+			if (o.once)	deleteCallback(e.keyCode);
 		}
 		// Store the key state
-		m_keys.set(_key, true);
+		keys.set(k, true);
 	}
 	
-	private static function keyUpHandler (_event:KeyboardEvent) :Void
-	{
-		var _key:String = Std.string(_event.keyCode);
-		m_keys.remove(_key);
+	private static function keyUpHandler (e:KeyboardEvent) :Void {
+		var k:String = Std.string(e.keyCode);
+		keys.remove(k);
 	}
 	
-	public static function isDown (_keyCode:Int) :Bool
-	{
-		var _key:String = Std.string(_keyCode);
-		return m_keys.get(_key);
+	static public function isDown (kc:Int) :Bool {
+		var k:String = Std.string(kc);
+		return keys.get(k);
 	}
 	
-	public static function setCallback (_keyCode:Int, _callback:Dynamic, ?_param:Dynamic, _fireOnce:Bool = false) :Void
-	{
-		var _object:CBObject = { call:_callback, param:_param, once:_fireOnce };
+	/**
+	 * @param	kc			keycode
+	 * @param	cb			callback
+	 * @param	?p		callback param
+	 * @param	f	fire once only
+	 */
+	static public function setCallback (kc:Int, cb:Dynamic, ?p:Dynamic, f:Bool = false) :Void {
+		var o:CBObject = { call:cb, param:p, once:f };
 		// Store the callback
-		var _key:String = Std.string(_keyCode);
-		m_callbacks.set(_key, _object);
+		var k:String = Std.string(kc);
+		callbacks.set(k, o);
 	}
 	
-	public static function deleteCallback (_keyCode:Int) :Void
-	{
+	static public function deleteCallback (kc:Int) :Void {
 		// Delete the callback
-		var _key:String = Std.string(_keyCode);
-		m_callbacks.remove(_key);
+		var k:String = Std.string(kc);
+		callbacks.remove(k);
 	}
-	
+
 }
-
-
-
-
-
-
-
-
-
-

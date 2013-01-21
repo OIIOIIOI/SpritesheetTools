@@ -32,21 +32,25 @@ class Label extends Sprite
 	public var type (default, setType):LabelType;
 	public var smallInc:Int;
 	public var bigInc:Int;
-	private var m_width:Int;
+	private var mWidth:Int;
 	public var textField (default, null):TextField;
-	private var m_textFormat:TextFormat;
-	private var m_background:Shape;
-
-	public function new (?_label:String = "", ?_width:Int = 120)
+	private var textFormat:TextFormat;
+	private var background:Shape;
+	
+	/**
+	 * @param	?l	label
+	 * @param	?w	width
+	 */
+	public function new (?l:String = "", ?w:Int = 120)
 	{
 		super();
 		
 		smallInc = 1;
 		bigInc = 10;
 		
-		m_width = _width;
+		mWidth = w;
 		
-		m_textFormat = new TextFormat("Tempesta", 8, 0x666666);
+		textFormat = new TextFormat("Tempesta", 8, 0x666666);
 		textField = new TextField();
 		textField.embedFonts = true;
 		textField.multiline = false;
@@ -54,18 +58,18 @@ class Label extends Sprite
 		textField.x = 8;
 		textField.y = 3;
 		
-		m_background = new Shape();
+		background = new Shape();
 		
-		addChild(m_background);
+		addChild(background);
 		addChild(textField);
 		
 		type = LabelType.hint;
-		label = _label;
+		label = l;
 	}
 	
 	private function update () :Void
 	{
-		var _backgroundColor:UInt = switch (type) {
+		var bgColor:UInt = switch (type) {
 			case LabelType.hint: 0x212121;
 			case LabelType.info: 0x212121;
 			case LabelType.title: 0x000000;
@@ -73,7 +77,7 @@ class Label extends Sprite
 			case LabelType.input: 0xCCCCCC;
 			case LabelType.stepper: 0xCCCCCC;
 		}
-		m_textFormat.color = switch (type) {
+		textFormat.color = switch (type) {
 			case LabelType.hint: 0x666666;
 			case LabelType.info: 0xDDDDDD;
 			case LabelType.title: 0xFE0065;
@@ -82,19 +86,19 @@ class Label extends Sprite
 			case LabelType.stepper: 0x000000;
 		}
 		
-		m_background.graphics.clear();
-		m_background.graphics.beginFill(_backgroundColor);
-		m_background.graphics.drawRect(0, 0, m_width, 25);
-		m_background.graphics.endFill();
+		background.graphics.clear();
+		background.graphics.beginFill(bgColor);
+		background.graphics.drawRect(0, 0, mWidth, 25);
+		background.graphics.endFill();
 		
 		if (label != null) {
 			textField.text = label;
-			textField.setTextFormat(m_textFormat);
+			textField.setTextFormat(textFormat);
 		}
 		
 		if (type == LabelType.input || type == LabelType.stepper) {
 			textField.autoSize = TextFieldAutoSize.NONE;
-			textField.width = m_width - textField.x * 2;
+			textField.width = mWidth - textField.x * 2;
 			textField.type = TextFieldType.INPUT;
 			if (type == LabelType.stepper)	textField.restrict = "0-9";
 			textField.selectable = true;
@@ -127,41 +131,41 @@ class Label extends Sprite
 		}
 	}
 	
-	private function relayEvent (_event:Event) :Void
+	private function relayEvent (e:Event) :Void
 	{
 		label = textField.text;
-		trace("relayEvent " + label);
-		dispatchEvent(_event);
+		//trace("relayEvent " + label);
+		dispatchEvent(e);
 	}
 	
-	private function mouseWheelHandler (_event:MouseEvent) :Void
+	private function mouseWheelHandler (e:MouseEvent) :Void
 	{
-		var _val:Int = Std.parseInt(cast(_event.currentTarget, TextField).text);
-		var _inc:Int = smallInc;
-		if (_event.shiftKey)	_inc = bigInc;
-		if (_event.delta > 0)	_val += _inc;
-		else					_val -= _inc;
-		cast(_event.currentTarget, TextField).text = Std.string(_val);
+		var v:Int = Std.parseInt(cast(e.currentTarget, TextField).text);
+		var i:Int = smallInc;
+		if (e.shiftKey)		i = bigInc;
+		if (e.delta > 0)	v += i;
+		else				v -= i;
+		cast(e.currentTarget, TextField).text = Std.string(v);
 		relayEvent(new Event(Event.CHANGE));
 	}
 	
-	private function keyboardEventHandler (_event:KeyboardEvent) :Void
+	private function keyboardEventHandler (e:KeyboardEvent) :Void
 	{
 		// Let the Escape key pass through, block the rest
-		if (_event.keyCode != Keyboard.ESCAPE)
-			_event.stopImmediatePropagation();
+		if (e.keyCode != Keyboard.ESCAPE)
+			e.stopImmediatePropagation();
 	}
 	
-	private function setLabel (_label:String) :String
+	private function setLabel (l:String) :String
 	{
-		label = _label;
+		label = l;
 		update();
 		return label;
 	}
 	
-	private function setType (_type:LabelType) :LabelType
+	private function setType (t:LabelType) :LabelType
 	{
-		type = _type;
+		type = t;
 		update();
 		return type;
 	}

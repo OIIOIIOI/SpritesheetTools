@@ -54,9 +54,9 @@ class IButton extends Sprite
 		}
 	}
 	
-	private function eventHandler (_event:MouseEvent) :Void
+	private function eventHandler (e:MouseEvent) :Void
 	{
-		switch (_event.type)
+		switch (e.type)
 		{
 			case MouseEvent.ROLL_OVER:	state = ButtonState.over;
 			case MouseEvent.ROLL_OUT:	state = ButtonState.up;
@@ -65,16 +65,16 @@ class IButton extends Sprite
 		}
 	}
 	
-	private function setState (_state:ButtonState) :ButtonState
+	private function setState (bs:ButtonState) :ButtonState
 	{
-		state = _state;
+		state = bs;
 		update();
 		return state;
 	}
 	
-	private function setLocked (_locked:Bool) :Bool
+	private function setLocked (b:Bool) :Bool
 	{
-		locked = _locked;
+		locked = b;
 		if (state != null)	update();
 		return locked;
 	}

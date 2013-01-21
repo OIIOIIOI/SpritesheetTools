@@ -27,78 +27,83 @@ class Frame
 	public var height (default, setHeight):Int;
 	public var uid (default, null):String;
 	public var bitmapData (getBitmapData, null):BitmapData;
-	private var m_bitmapData:BitmapData;
 	
-	public function new (?_x:Int = 0, ?_y:Int = 0, ?_width:Int = 1, ?_height:Int = 1)
+	/**
+	 * @param	?xPos	x
+	 * @param	?yPos	y
+	 * @param	?w		width
+	 * @param	?h		height
+	 */
+	public function new (?xPos:Int = 0, ?yPos:Int = 0, ?w:Int = 1, ?h:Int = 1)
 	{
-		uid = Std.string(Date.now().getTime() + "_" + Std.random(1000));
+		uid = Std.string(Date.now().getTime() + "" + Std.random(1000));
 		state = FrameState.normal;
 		name = uid;
-		x = _x;
-		y = _y;
-		width = _width;
-		height = _height;
+		x = xPos;
+		y = yPos;
+		width = w;
+		height = h;
 	}
 	
-	public function fromObject (_data:Dynamic) :Void
+	public function fromObject (d:Dynamic) :Void
 	{
-		name = _data._name;
-		uid = _data._uid;
-		x = _data._x;
-		y = _data._y;
-		width = _data._width;
-		height = _data._height;
+		name = d._name;
+		uid = d._uid;
+		x = d._x;
+		y = d._y;
+		width = d._width;
+		height = d._height;
 	}
 	
-	private function setWidth (_width:Int) :Int
+	private function setWidth (w:Int) :Int
 	{
-		width = Std.int(Math.max(_width, 1));
-		if (m_bitmapData != null)	m_bitmapData = null;
+		width = Std.int(Math.max(w, 1));
+		if (bitmapData != null)	bitmapData = null;
 		return width;
 	}
 	
-	private function setHeight (_height:Int) :Int
+	private function setHeight (h:Int) :Int
 	{
-		height = Std.int(Math.max(_height, 1));
-		if (m_bitmapData != null)	m_bitmapData = null;
+		height = Std.int(Math.max(h, 1));
+		if (bitmapData != null)	bitmapData = null;
 		return height;
 	}
 	
-	private function setState (_state:FrameState) :FrameState
+	private function setState (s:FrameState) :FrameState
 	{
-		state = _state;
-		if (m_bitmapData != null)	m_bitmapData = null;
+		state = s;
+		if (bitmapData != null)	bitmapData = null;
 		return state;
 	}
 	
 	public function getBitmapData () :BitmapData
 	{
-		if (m_bitmapData == null) {
-			var _borderAlpha:UInt = switch (state) {
+		if (bitmapData == null && width > 0 && height > 0) {
+			var borderAlpha:UInt = switch (state) {
 				case FrameState.editing: 0x77000000;
 				case FrameState.invalid: 0x77000000;
 				case FrameState.normal: 0x77000000;
 				case FrameState.highlighted: 0x77000000;
 				case FrameState.selected: 0xFF000000;
 			}
-			var _backgroundAlpha:UInt = switch (state) {
+			var backgroundAlpha:UInt = switch (state) {
 				case FrameState.editing: 0x55000000;
 				case FrameState.invalid: 0x55000000;
 				case FrameState.normal: 0x55000000;
 				case FrameState.highlighted: 0x55000000;
 				case FrameState.selected: 0x77000000;
 			}
-			var _color:UInt = switch (state) {
+			var color:UInt = switch (state) {
 				case FrameState.editing: 0x00FF00;
 				case FrameState.invalid: 0xFF0000;
 				case FrameState.normal: 0x417DFF;
 				case FrameState.highlighted: 0x999999;
 				case FrameState.selected: 0x417DFF;
 			}
-			m_bitmapData = new BitmapData(Std.int(width), Std.int(height), true, _borderAlpha + _color);
-			m_bitmapData.fillRect(new Rectangle(1, 1, width - 2, height - 2), _backgroundAlpha + _color);
+			bitmapData = new BitmapData(Std.int(width), Std.int(height), true, borderAlpha + color);
+			bitmapData.fillRect(new Rectangle(1, 1, width - 2, height - 2), backgroundAlpha + color);
 		}
-		return m_bitmapData;
+		return bitmapData;
 	}
 	
 	public function getData () :FrameExport
@@ -108,9 +113,9 @@ class Frame
 	
 	public function destroy () :Void
 	{
-		if (m_bitmapData != null) {
-			m_bitmapData.dispose();
-			m_bitmapData = null;
+		if (bitmapData != null) {
+			bitmapData.dispose();
+			bitmapData = null;
 		}
 	}
 	

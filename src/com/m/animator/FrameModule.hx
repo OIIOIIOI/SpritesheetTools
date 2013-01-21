@@ -15,174 +15,175 @@ import flash.events.Event;
 class FrameModule extends Sprite
 {
 	
-	public var frame (getFrame, null):Frame;
-	private var m_frame:Frame;
+	public var frame (default, null):Frame;
 	public var isValid:Frame->Bool;
 	
-	private var m_titleLabel:Label;
-	private var m_nameLabel:Label;
-	private var m_nameInput:Label;
-	private var m_xLabel:Label;
-	private var m_xInput:Label;
-	private var m_yLabel:Label;
-	private var m_yInput:Label;
-	private var m_widthLabel:Label;
-	private var m_widthInput:Label;
-	private var m_heightLabel:Label;
-	private var m_heightInput:Label;
+	private var titleLabel:Label;
+	private var nameLabel:Label;
+	private var nameInput:Label;
+	private var xLabel:Label;
+	private var xInput:Label;
+	private var yLabel:Label;
+	private var yInput:Label;
+	private var widthLabel:Label;
+	private var widthInput:Label;
+	private var heightLabel:Label;
+	private var heightInput:Label;
 	
-	private var m_background:Shape;
+	private var background:Shape;
 	
 	public function new ()
 	{
 		super();
 		
-		var _labelWidth:Int = 55;
-		var _inputWidth:Int = 65;
+		var lw:Int = 55;
+		var iw:Int = 65;
 		
-		m_titleLabel = new Label("Frame properties", UI.LEFT_COL_W);
-		m_titleLabel.type = LabelType.title;
+		titleLabel = new Label("Frame properties", UI.LEFT_COL_W);
+		titleLabel.type = LabelType.title;
 		
-		var _fullHeight:Int = Std.int(m_titleLabel.height) * 3 + UI.GUTTER * 4;
+		var fh:Int = Std.int(titleLabel.height) * 3 + UI.GUTTER * 4;
 		
-		m_background = new Shape();
-		m_background.graphics.beginFill(0x0F0F0F);
-		m_background.graphics.drawRect(0, m_titleLabel.height, UI.LEFT_COL_W, _fullHeight);
-		m_background.graphics.endFill();
+		background = new Shape();
+		background.graphics.beginFill(0x0F0F0F);
+		background.graphics.drawRect(0, titleLabel.height, UI.LEFT_COL_W, fh);
+		background.graphics.endFill();
 		
 		// ---- Name
 		// Label
-		m_nameLabel = new Label("Name:", _labelWidth);
-		m_nameLabel.type = LabelType.info;
-		m_nameLabel.x = UI.GUTTER;
-		m_nameLabel.y = m_titleLabel.y + m_titleLabel.height + UI.GUTTER;
+		nameLabel = new Label("Name:", lw);
+		nameLabel.type = LabelType.info;
+		nameLabel.x = UI.GUTTER;
+		nameLabel.y = titleLabel.y + titleLabel.height + UI.GUTTER;
 		// Input
-		m_nameInput = new Label("", Std.int(UI.LEFT_COL_W - m_nameLabel.width - UI.GUTTER * 3));
-		m_nameInput.type = LabelType.input;
-		m_nameInput.textField.restrict = "a-zA-Z0-9_";
-		m_nameInput.x = m_nameLabel.x + m_nameLabel.width + UI.GUTTER;
-		m_nameInput.y = m_nameLabel.y;
-		m_nameInput.addEventListener(Event.CHANGE, changeHandler);
+		nameInput = new Label("", Std.int(UI.LEFT_COL_W - nameLabel.width - UI.GUTTER * 3));
+		nameInput.type = LabelType.input;
+		nameInput.textField.restrict = "a-zA-Z0-9_";
+		nameInput.x = nameLabel.x + nameLabel.width + UI.GUTTER;
+		nameInput.y = nameLabel.y;
+		nameInput.addEventListener(Event.CHANGE, changeHandler);
 		
 		// ---- X position
 		// Label
-		m_xLabel = new Label("X pos:", _labelWidth);
-		m_xLabel.type = LabelType.info;
-		m_xLabel.x = 8;
-		m_xLabel.y = m_nameLabel.y + m_nameLabel.height + UI.GUTTER;
+		xLabel = new Label("X pos:", lw);
+		xLabel.type = LabelType.info;
+		xLabel.x = 8;
+		xLabel.y = nameLabel.y + nameLabel.height + UI.GUTTER;
 		// Input
-		m_xInput = new Label("", _inputWidth);
-		m_xInput.type = LabelType.stepper;
-		m_xInput.x = m_xLabel.x + m_xLabel.width + UI.GUTTER;
-		m_xInput.y = m_xLabel.y;
-		m_xInput.addEventListener(Event.CHANGE, changeHandler);
+		xInput = new Label("", iw);
+		xInput.type = LabelType.stepper;
+		xInput.x = xLabel.x + xLabel.width + UI.GUTTER;
+		xInput.y = xLabel.y;
+		xInput.addEventListener(Event.CHANGE, changeHandler);
 		
 		// ---- Y position
 		// Label
-		m_yLabel = new Label("Y pos:", _labelWidth);
-		m_yLabel.type = LabelType.info;
-		m_yLabel.x = m_xLabel.x;
-		m_yLabel.y = m_xLabel.y + m_xLabel.height + UI.GUTTER;
+		yLabel = new Label("Y pos:", lw);
+		yLabel.type = LabelType.info;
+		yLabel.x = xLabel.x;
+		yLabel.y = xLabel.y + xLabel.height + UI.GUTTER;
 		// Input
-		m_yInput = new Label("", _inputWidth);
-		m_yInput.type = LabelType.stepper;
-		m_yInput.x = m_yLabel.x + m_yLabel.width + UI.GUTTER;
-		m_yInput.y = m_yLabel.y;
-		m_yInput.addEventListener(Event.CHANGE, changeHandler);
+		yInput = new Label("", iw);
+		yInput.type = LabelType.stepper;
+		yInput.x = yLabel.x + yLabel.width + UI.GUTTER;
+		yInput.y = yLabel.y;
+		yInput.addEventListener(Event.CHANGE, changeHandler);
 		
 		// ---- Width
 		// Label
-		m_widthLabel = new Label("Width:", _labelWidth);
-		m_widthLabel.type = LabelType.info;
-		m_widthLabel.x = m_xInput.x + m_xInput.width + UI.GUTTER;
-		m_widthLabel.y = m_xLabel.y;
+		widthLabel = new Label("Width:", lw);
+		widthLabel.type = LabelType.info;
+		widthLabel.x = xInput.x + xInput.width + UI.GUTTER;
+		widthLabel.y = xLabel.y;
 		// Input
-		m_widthInput = new Label("", _inputWidth);
-		m_widthInput.type = LabelType.stepper;
-		m_widthInput.x = m_widthLabel.x + m_widthLabel.width + UI.GUTTER;
-		m_widthInput.y = m_widthLabel.y;
-		m_widthInput.addEventListener(Event.CHANGE, changeHandler);
+		widthInput = new Label("", iw);
+		widthInput.type = LabelType.stepper;
+		widthInput.x = widthLabel.x + widthLabel.width + UI.GUTTER;
+		widthInput.y = widthLabel.y;
+		widthInput.addEventListener(Event.CHANGE, changeHandler);
 		
 		// ---- Height
 		// Label
-		m_heightLabel = new Label("Height:", _labelWidth);
-		m_heightLabel.type = LabelType.info;
-		m_heightLabel.x = m_yInput.x + m_yInput.width + UI.GUTTER;
-		m_heightLabel.y = m_yLabel.y;
+		heightLabel = new Label("Height:", lw);
+		heightLabel.type = LabelType.info;
+		heightLabel.x = yInput.x + yInput.width + UI.GUTTER;
+		heightLabel.y = yLabel.y;
 		// Input
-		m_heightInput = new Label("", _inputWidth);
-		m_heightInput.type = LabelType.stepper;
-		m_heightInput.x = m_heightLabel.x + m_heightLabel.width + UI.GUTTER;
-		m_heightInput.y = m_heightLabel.y;
-		m_heightInput.addEventListener(Event.CHANGE, changeHandler);
+		heightInput = new Label("", iw);
+		heightInput.type = LabelType.stepper;
+		heightInput.x = heightLabel.x + heightLabel.width + UI.GUTTER;
+		heightInput.y = heightLabel.y;
+		heightInput.addEventListener(Event.CHANGE, changeHandler);
 		
-		addChild(m_background);
-		addChild(m_titleLabel);
-		addChild(m_nameLabel);
-		addChild(m_nameInput);
-		addChild(m_xLabel);
-		addChild(m_xInput);
-		addChild(m_yLabel);
-		addChild(m_yInput);
-		addChild(m_widthLabel);
-		addChild(m_widthInput);
-		addChild(m_heightLabel);
-		addChild(m_heightInput);
+		addChild(background);
+		addChild(titleLabel);
+		addChild(nameLabel);
+		addChild(nameInput);
+		addChild(xLabel);
+		addChild(xInput);
+		addChild(yLabel);
+		addChild(yInput);
+		addChild(widthLabel);
+		addChild(widthInput);
+		addChild(heightLabel);
+		addChild(heightInput);
 	}
 	
-	private function changeHandler (_event:Event) :Void
+	private function changeHandler (e:Event) :Void
 	{
-		var _oldValue:Int;
-		switch (_event.currentTarget) {
-			case m_nameInput:
-				frame.name = m_nameInput.label;
-			case m_xInput:
-				_oldValue = Std.int(frame.x);
-				frame.x = Std.parseInt(m_xInput.label);
+		var oldValue:Int;
+		switch (e.currentTarget) {
+			case nameInput:
+				frame.name = nameInput.label;
+			case xInput:
+				oldValue = Std.int(frame.x);
+				frame.x = Std.parseInt(xInput.label);
 				if (isValid != null && !isValid(frame)) {
-					m_xInput.label = Std.string(_oldValue);
-					frame.x = _oldValue;
+					xInput.label = Std.string(oldValue);
+					frame.x = oldValue;
 				}
-			case m_yInput:
-				_oldValue = Std.int(frame.y);
-				frame.y = Std.parseInt(m_yInput.label);
+			case yInput:
+				oldValue = Std.int(frame.y);
+				frame.y = Std.parseInt(yInput.label);
 				if (isValid != null && !isValid(frame)) {
-					m_yInput.label = Std.string(_oldValue);
-					frame.y = _oldValue;
+					yInput.label = Std.string(oldValue);
+					frame.y = oldValue;
 				}
-			case m_widthInput:
-				_oldValue = Std.int(frame.width);
-				frame.width = Std.parseInt(m_widthInput.label);
+			case widthInput:
+				oldValue = Std.int(frame.width);
+				frame.width = Std.parseInt(widthInput.label);
 				if (isValid != null && !isValid(frame)) {
-					m_widthInput.label = Std.string(_oldValue);
-					frame.width = _oldValue;
+					widthInput.label = Std.string(oldValue);
+					frame.width = oldValue;
 				}
-			case m_heightInput:
-				_oldValue = Std.int(frame.height);
-				frame.height = Std.parseInt(m_heightInput.label);
+			case heightInput:
+				oldValue = Std.int(frame.height);
+				frame.height = Std.parseInt(heightInput.label);
 				if (isValid != null && !isValid(frame)) {
-					m_heightInput.label = Std.string(_oldValue);
-					frame.height = _oldValue;
+					heightInput.label = Std.string(oldValue);
+					frame.height = oldValue;
 				}
 		}
 	}
 	
-	private function getFrame () :Frame { return m_frame; }
-	
-	public function setFrame (_frame:Frame, ?_new:Bool = false) :Void
+	/**
+	 * @param	f	frame
+	 * @param	?n	new
+	 */
+	public function setFrame (f:Frame, ?n:Bool = false) :Void
 	{
-		if (m_frame != null) {
-			m_frame.state = FrameState.normal;
+		if (frame != null) {
+			frame.state = FrameState.normal;
 		}
-		m_frame = _frame;
-		if (m_frame != null) {
-			m_frame.state = FrameState.selected;
-			m_nameInput.label = m_frame.name;
-			if (_new)	m_nameInput.setFocus();
-			m_xInput.label = Std.string(m_frame.x);
-			m_yInput.label = Std.string(m_frame.y);
-			m_widthInput.label = Std.string(m_frame.width);
-			m_heightInput.label = Std.string(m_frame.height);
+		frame = f;
+		if (frame != null) {
+			frame.state = FrameState.selected;
+			nameInput.label = frame.name;
+			if (n)	nameInput.setFocus();
+			xInput.label = Std.string(frame.x);
+			yInput.label = Std.string(frame.y);
+			widthInput.label = Std.string(frame.width);
+			heightInput.label = Std.string(frame.height);
 		}
 	}
 	
