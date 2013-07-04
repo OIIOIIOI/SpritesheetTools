@@ -1,4 +1,4 @@
 SpritesheetTools
 ================
 
-TODO: lots
+**TODO:** lots
